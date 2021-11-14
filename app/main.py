@@ -18,6 +18,7 @@ from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(32)
+app.config['REDIS_URL'] = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 auth = HTTPDigestAuth()
 if app.testing:
     redis_client = FakeRedis(app)
