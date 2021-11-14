@@ -31,4 +31,4 @@ jobs:
       - name: Run tests
         run: coverage run app/tests.py
       - name: Tests report
-        run: coverate report
+        run: coverage report
