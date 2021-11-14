@@ -11,6 +11,7 @@ from urllib.parse import urljoin
 from flask import Flask, request, send_file, render_template, redirect, url_for
 from flask_httpauth import HTTPDigestAuth
 from flask_redis import FlaskRedis
+from fakeredis import FakeRedis
 from pyqrcode import QRCode
 from transliterate import translit
 from dateutil.relativedelta import relativedelta
@@ -18,7 +19,10 @@ from dateutil.relativedelta import relativedelta
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(32)
 auth = HTTPDigestAuth()
-redis_client = FlaskRedis(app)
+if app.testing:
+    redis_client = FakeRedis(app)
+else:
+    redis_client = FlaskRedis(app)
 
 users = {
     'admin': {
@@ -43,6 +47,7 @@ if app.config.get('ADMIN_USERS') and int(app.config.get('ADMIN_USERS')) > 0:
             'series': app.config.get(f'USER_{idx}_SERIES'),
             'number': app.config.get(f'USER_{idx}_NUMBER'),
         }
+setattr(app, 'users', users)
 
 
 @auth.get_password
@@ -224,7 +229,8 @@ def qr_generator():
         # Получаем данные из формы и записываем в Redis с указанным сроком годности
         qr_config = request.form.to_dict()
         qr_config['qr'] = qr_code
-        redis_client.hmset(unrz, qr_config)
+        for key, value in qr_config.items():
+            redis_client.hset(unrz, key, value)
         redis_client.expire(unrz, timedelta(seconds=int(qr_config.get('expire', 3600))))
 
     return render_template('qr-generator.html',
