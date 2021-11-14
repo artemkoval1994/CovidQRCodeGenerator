@@ -1,3 +1,4 @@
+import os
 import random
 import string
 from datetime import timedelta
@@ -11,6 +12,7 @@ class FlaskAppTest(unittest.TestCase):
         tested_app.app.config['TESTING'] = True
         self.app = tested_app.app.test_client()
         setattr(self.app, 'users', tested_app.users)
+        print('REDIS_URL = ' + os.getenv('REDIS_URL'))
         self.redis_client = tested_app.redis_client
 
     def test_get_home(self):
