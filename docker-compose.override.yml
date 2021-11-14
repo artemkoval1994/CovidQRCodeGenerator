@@ -12,3 +12,8 @@ services:
     # command: flask run --host=0.0.0.0 --port=80
     # Infinite loop, to keep it alive, for debugging
     # command: bash -c "while true; do echo 'sleeping...' && sleep 10; done"
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
