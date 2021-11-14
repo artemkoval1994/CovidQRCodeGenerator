@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TEST QR Code Generator</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        .container {
+            max-width: 960px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container">
+    <main>
+        <div class="py-5 text-center">
+            <img src="img/gos_logo_mobile.svg" width="72" alt="Генератор QR кодов">
+            <h2>Здравствуйте, {{ username|title }}!</h2>
+            <p class="lead">
+                Заполните форму ниже, чтобы создать QR-код.
+                Созданный QR-код не является реальным и действующим, создаётся только с целью тестирования платформы.
+            </p>
+        </div>
+        <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary">Тестовый QR код</span>
+                </h4>
+                {% if qr_code %}
+                    <a href="{{ url }}"><img src="data:image/png;base64,{{ qr_code }}"
+                                             alt="Сохраните этот код себе в телефон"></a>
+                {% endif %}
+            </div>
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3">Тестовые данные</h4>
+                <form class="needs-validation" method="post" novalidate>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Фамилия</label>
+                            <input type="text" id="lastName" name="last_name" value="{{ user.last_name }}" class="form-control" placeholder="Иванов"
+                                   required>
+                            <div class="invalid-feedback">
+                                Для создания тестового QR кода необходима фамилия.
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">Имя</label>
+                            <input type="text" id="firstName" name="first_name" value="{{ user.first_name }}" class="form-control" placeholder="Иван"
+                                   required>
+                            <div class="invalid-feedback">
+                                Для создания тестового QR кода необходимо имя.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="secondName" class="form-label">Отчество</label>
+                            <input type="text" id="secondName" name="second_name" value="{{ user.second_name }}" class="form-control"
+                                   placeholder="Иванович" required>
+                            <div class="invalid-feedback">
+                                Для создания тестового QR кода необходимо отчество.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="birthDay" class="form-label">Дата рождения</label>
+                            <input type="date" id="birthDay" name="b_day" value="{{ user.b_day }}" class="form-control" required>
+                            <div class="invalid-feedback">
+                                Для создания тестового QR кода необходима дата рождения.
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="nPassportSeries" class="form-label">Серия паспорта</label>
+                            <input type="number" id="nPassportSeries" name="series" value="{{ user.series }}" class="form-control"
+                                   placeholder="12" required>
+                            <small class="text-muted">Введите только 2 первые цифры</small>
+                            <div class="invalid-feedback">
+                                Для создания тестового QR кода необходимы 2 первые цифры серии паспорта.
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="nPassportNumber" class="form-label">Номер паспорта</label>
+                            <input type="number" id="nPassportNumber" name="number" value="{{ user.number }}" class="form-control"
+                                   placeholder="987" required>
+                            <small class="text-muted">Введите только 3 последние цифры</small>
+                            <div class="invalid-feedback">
+                                Для создания тестового QR кода необходимы 3 последние цифры номера паспорта.
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <h4 class="mb-3">Настройки генератора</h4>
+                        <div class="col-12">
+                            <label for="expire" class="form-label">Срок действия</label>
+                            <select id="expire" name="expire" class="form-select">
+                                <option value="3600">1 час</option>
+                                <option value="1800">30 минут</option>
+                                <option value="600">10 минут</option>
+                            </select>
+                            <small class="text-muted">Через указанный период времени тестовый QR-код перестанет
+                                валидироваться на тестовом стенде.</small>
+                        </div>
+                        <hr class="my-4">
+                        <button class="w-100 btn btn-primary btn-lg" type="submit">Создать тестовый QR-код</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">Это демонстрационный стенд для тестирования варидации QR-кодов.</p>
+    </footer>
+</div>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="js/form-validator.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+Flask==2.0.2
+pypng==0.0.21
+PyQRCode==1.2.1
+Flask-HTTPAuth==4.5.0
+flask-redis==0.4.0
+transliterate==1.10.2
+python-dateutil==2.8.2
