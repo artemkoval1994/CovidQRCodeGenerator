@@ -9,7 +9,10 @@ on:
 
 jobs:
   run_tests:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
     steps:
       - uses: actions/checkout@main
       - uses: actions/setup-python@v1
@@ -20,5 +23,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run tests
         run: coverage run app/tests.py
+        env:
+          REDIS_URL: "redis://redis:6379/0"
       - name: Tests report
         run: coverate report
