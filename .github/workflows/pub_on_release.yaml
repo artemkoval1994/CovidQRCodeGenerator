@@ -35,6 +35,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Get version
+        id: get_ver
+        run: echo ::set-output name=VERSION::$(echo ${GITHUB_REG:11})
       - name: Login to DokcerHub
         uses: docker/login-action@v1
         with:
@@ -45,7 +48,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME }}:${GITHUB_REF:11},${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME }}:latest
+          tags: ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME }}:${{ steps.get_ver.VERSION }},${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME }}:latest
 #  deploy:
 #    needs: [build_and_pub]
 #    runs-on: ubuntu-latest

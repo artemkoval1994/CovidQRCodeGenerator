@@ -32,8 +32,3 @@ jobs:
         run: coverage run app/tests.py
       - name: Tests report
         run: coverage report
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::$(echo ${GITHUB_REF:11})
-      - name: Test guthub ref
-        run: echo ${{ steps.get_version.outputs.VERSION }}
