@@ -43,6 +43,7 @@ jobs:
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_PWD }}
           tag_semver: true
+          tags: 'latest'
 #  deploy:
 #    needs: [build_and_pub]
 #    runs-on: ubuntu-latest
