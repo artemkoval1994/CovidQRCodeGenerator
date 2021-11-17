@@ -32,3 +32,5 @@ jobs:
         run: coverage run app/tests.py
       - name: Tests report
         run: coverage report
+      - name: Test guthub ref
+        run: echo ${{ github.ref }}
