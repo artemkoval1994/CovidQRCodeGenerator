@@ -36,14 +36,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Publish to Registry
-#        pre: echo ::save-state name=STATE_RELEASE_VERSION::$(echo ${GITHUB_REF:11})
+        pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME }}
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_PWD }}
+          tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
           tag_semver: true
-          tags: 'latest'
 #  deploy:
 #    needs: [build_and_pub]
 #    runs-on: ubuntu-latest
