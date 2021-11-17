@@ -36,14 +36,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Get version
-        run: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo ${GITHUB_REF:11})
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME }}
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_PWD }}
-          tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
+          tags: "latest,${{ steps.get_version.outputs.VERSION }}"
           tag_semver: true
 #  deploy:
 #    needs: [build_and_pub]
