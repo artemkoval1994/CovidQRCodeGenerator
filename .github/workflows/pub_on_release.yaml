@@ -35,8 +35,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Get version
+        run: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
       - name: Publish to Registry
-        pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME }}
