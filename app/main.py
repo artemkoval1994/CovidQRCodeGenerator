@@ -37,17 +37,17 @@ users = {
         'number': '789',
     }
 }
-if app.config.get('ADMIN_USERS') and int(app.config.get('ADMIN_USERS')) > 0:
+if os.getenv('ADMIN_USERS', 0) and int(os.getenv('ADMIN_USERS', 0)) > 0:
     users = {}
-    for idx in range(int(app.config['ADMIN_USERS'])):
-        users[app.config.get(f'USER_{idx}_USERNAME')] = {
-            'password': app.config.get(f'USER_{idx}_PASSWORD'),
-            'first_name': app.config.get(f'USER_{idx}_FIRST_NAME'),
-            'last_name': app.config.get(f'USER_{idx}_LAST_NAME'),
-            'second_name': app.config.get(f'USER_{idx}_SECOND_NAME'),
-            'b_day': app.config.get(f'USER_{idx}_B_DAY'),
-            'series': app.config.get(f'USER_{idx}_SERIES'),
-            'number': app.config.get(f'USER_{idx}_NUMBER'),
+    for idx in range(int(os.getenv('ADMIN_USERS'))):
+        users[os.getenv(f'USER_{idx}_USERNAME')] = {
+            'password': os.getenv(f'USER_{idx}_PASSWORD'),
+            'first_name': os.getenv(f'USER_{idx}_FIRST_NAME'),
+            'last_name': os.getenv(f'USER_{idx}_LAST_NAME'),
+            'second_name': os.getenv(f'USER_{idx}_SECOND_NAME'),
+            'b_day': os.getenv(f'USER_{idx}_B_DAY'),
+            'series': os.getenv(f'USER_{idx}_SERIES'),
+            'number': os.getenv(f'USER_{idx}_NUMBER'),
         }
 setattr(app, 'users', users)
 
