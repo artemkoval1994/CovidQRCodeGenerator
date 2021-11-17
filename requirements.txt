@@ -7,3 +7,4 @@ transliterate==1.10.2
 python-dateutil==2.8.2
 fakeredis==1.6.1
 coverage==6.1.2
+idna==3.3

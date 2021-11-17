@@ -8,6 +8,7 @@ import uuid
 from datetime import timedelta, datetime
 from urllib.parse import urljoin
 
+import idna
 from flask import Flask, request, send_file, render_template, redirect, url_for
 from flask_httpauth import HTTPDigestAuth
 from flask_redis import FlaskRedis
@@ -218,7 +219,8 @@ def qr_generator():
         # Создает query параметры для URL
         query_params = f'{lang=}&{ck=}'
         # Создаём URL для будущего QR-кода
-        url = urljoin(request.host_url, url_for('covid_cert_verify', unrz=unrz))
+        host = idna.encode(request.host_url)
+        url = urljoin(host.decode('utf-8'), url_for('covid_cert_verify', unrz=unrz))
         url += '?' + query_params.replace("'", '')
 
         # Создаём необходимый нам QR-код
