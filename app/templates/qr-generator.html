@@ -32,8 +32,10 @@
                     <span class="text-primary">Тестовый QR код</span>
                 </h4>
                 {% if qr_code %}
-                    <a href="{{ url }}"><img src="data:image/png;base64,{{ qr_code }}"
-                                             alt="Сохраните этот код себе в телефон"></a>
+                    <a href="{{ url }}"><img src="data:image/png;base64,{{ qr_code }}" alt=""></a>
+                    <p>
+                        <small>Данный QR-код действителен до: {{ ttl }}</small>
+                    </p>
                 {% endif %}
             </div>
             <div class="col-md-7 col-lg-8">
@@ -42,7 +44,8 @@
                     <div class="row g-3">
                         <div class="col-sm-6">
                             <label for="lastName" class="form-label">Фамилия</label>
-                            <input type="text" id="lastName" name="last_name" value="{{ user.last_name }}" class="form-control" placeholder="Иванов"
+                            <input type="text" id="lastName" name="last_name" value="{{ user.last_name }}"
+                                   class="form-control" placeholder="Иванов"
                                    required>
                             <div class="invalid-feedback">
                                 Для создания тестового QR кода необходима фамилия.
@@ -50,7 +53,8 @@
                         </div>
                         <div class="col-sm-6">
                             <label for="firstName" class="form-label">Имя</label>
-                            <input type="text" id="firstName" name="first_name" value="{{ user.first_name }}" class="form-control" placeholder="Иван"
+                            <input type="text" id="firstName" name="first_name" value="{{ user.first_name }}"
+                                   class="form-control" placeholder="Иван"
                                    required>
                             <div class="invalid-feedback">
                                 Для создания тестового QR кода необходимо имя.
@@ -58,7 +62,8 @@
                         </div>
                         <div class="col-12">
                             <label for="secondName" class="form-label">Отчество</label>
-                            <input type="text" id="secondName" name="second_name" value="{{ user.second_name }}" class="form-control"
+                            <input type="text" id="secondName" name="second_name" value="{{ user.second_name }}"
+                                   class="form-control"
                                    placeholder="Иванович" required>
                             <div class="invalid-feedback">
                                 Для создания тестового QR кода необходимо отчество.
@@ -66,14 +71,16 @@
                         </div>
                         <div class="col-12">
                             <label for="birthDay" class="form-label">Дата рождения</label>
-                            <input type="date" id="birthDay" name="b_day" value="{{ user.b_day }}" class="form-control" required>
+                            <input type="date" id="birthDay" name="b_day" value="{{ user.b_day }}" class="form-control"
+                                   required>
                             <div class="invalid-feedback">
                                 Для создания тестового QR кода необходима дата рождения.
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <label for="nPassportSeries" class="form-label">Серия паспорта</label>
-                            <input type="number" id="nPassportSeries" name="series" value="{{ user.series }}" class="form-control"
+                            <input type="number" id="nPassportSeries" name="series" value="{{ user.series }}"
+                                   class="form-control"
                                    placeholder="12" required>
                             <small class="text-muted">Введите только 2 первые цифры</small>
                             <div class="invalid-feedback">
@@ -82,7 +89,8 @@
                         </div>
                         <div class="col-sm-6">
                             <label for="nPassportNumber" class="form-label">Номер паспорта</label>
-                            <input type="number" id="nPassportNumber" name="number" value="{{ user.number }}" class="form-control"
+                            <input type="number" id="nPassportNumber" name="number" value="{{ user.number }}"
+                                   class="form-control"
                                    placeholder="987" required>
                             <small class="text-muted">Введите только 3 последние цифры</small>
                             <div class="invalid-feedback">

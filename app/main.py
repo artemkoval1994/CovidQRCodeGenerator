@@ -9,13 +9,14 @@ from datetime import timedelta, datetime
 from urllib.parse import urljoin
 
 import idna
+import pytz
+from dateutil.relativedelta import relativedelta
+from fakeredis import FakeRedis
 from flask import Flask, request, send_file, render_template, redirect, url_for
 from flask_httpauth import HTTPDigestAuth
 from flask_redis import FlaskRedis
-from fakeredis import FakeRedis
 from pyqrcode import QRCode
 from transliterate import translit
-from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(32)
@@ -35,6 +36,7 @@ users = {
         'b_day': '2020-01-01',
         'series': '12',
         'number': '789',
+        'tz': 'Europe/Moscow'
     }
 }
 if os.getenv('ADMIN_USERS', 0) and int(os.getenv('ADMIN_USERS', 0)) > 0:
@@ -48,6 +50,7 @@ if os.getenv('ADMIN_USERS', 0) and int(os.getenv('ADMIN_USERS', 0)) > 0:
             'b_day': os.getenv(f'USER_{idx}_B_DAY'),
             'series': os.getenv(f'USER_{idx}_SERIES'),
             'number': os.getenv(f'USER_{idx}_NUMBER'),
+            'tz': os.getenv(f'USER_{idx}_TIMEZONE')
         }
 setattr(app, 'users', users)
 
@@ -208,6 +211,8 @@ def covid_cert_check(unrz: str):
 def qr_generator():
     qr_code = None
     url = None
+    user = users[auth.current_user()]
+    ttl = datetime.now()
 
     if request.method == 'POST':
         # Генерируем случайный код пациента
@@ -236,10 +241,12 @@ def qr_generator():
         for key, value in qr_config.items():
             redis_client.hset(unrz, key, value)
         redis_client.expire(unrz, timedelta(seconds=int(qr_config.get('expire', 3600))))
+        ttl = datetime.now(pytz.timezone(user['tz'])) + timedelta(seconds=int(qr_config.get('expire', 3600)))
 
     return render_template('qr-generator.html',
                            username=auth.current_user(),
-                           user=users[auth.current_user()],
+                           user=user,
+                           ttl=ttl.strftime('%H:%M:%S %d.%m.%Y (%Z)'),
                            url=url, qr_code=qr_code)
 
 
