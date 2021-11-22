@@ -1,13 +1,26 @@
 version: '3'
 services:
   web:
-    build: ./
+    build: .
     volumes:
       - ./app:/app:z
     ports:
       - 5000:80
     environment:
       - REDIS_URL=redis://redis:6379/0
+    env_file:
+      - .env
+
+  tg:
+    build:
+      context: .
+      dockerfile: tg.dockerfile
+    volumes:
+      - ./app:/app:z
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    env_file:
+      - .env
 
   redis:
     image: redis:6-alpine
